@@ -1313,7 +1313,7 @@
 
         <div class="product-footer">
           <div class="product-price">$55.00</div>
-          <button class="add-to-cart" onclick="addToCart('Signature Painted Cap', 55.00)">
+          <button class="add-to-cart" onclick="addToCart(this, 'Signature Painted Cap', 55.00)">
             Add
           </button>
         </div>
@@ -1334,7 +1334,7 @@
 
         <div class="product-footer">
           <div class="product-price">$48.00</div>
-          <button class="add-to-cart" onclick="addToCart('Custom Bucket Hat', 48.00)">
+          <button class="add-to-cart" onclick="addToCart(this, 'Custom Bucket Hat', 48.00)">
             Add
           </button>
         </div>
@@ -1355,7 +1355,7 @@
 
         <div class="product-footer">
           <div class="product-price">$18.00</div>
-          <button class="add-to-cart" onclick="addToCart('Custom Sticker Pack', 18.00)">
+          <button class="add-to-cart" onclick="addToCart(this, 'Custom Sticker Pack', 18.00)">
             Add
           </button>
         </div>
@@ -1376,7 +1376,7 @@
 
         <div class="product-footer">
           <div class="product-price">$8.00</div>
-          <button class="add-to-cart" onclick="addToCart('Large Logo Sticker', 8.00)">
+          <button class="add-to-cart" onclick="addToCart(this, 'Large Logo Sticker', 8.00)">
             Add
           </button>
         </div>
@@ -1397,7 +1397,7 @@
 
         <div class="product-footer">
           <div class="product-price">$18.00</div>
-          <button class="add-to-cart" onclick="addToCart('Custom Sticker Pack', 18.00)">
+          <button class="add-to-cart" onclick="addToCart(this, 'Custom Sticker Pack', 18.00)">
             Add
           </button>
         </div>
@@ -1708,22 +1708,30 @@
     document.getElementById('cartDrawer').classList.remove('open');
   }
 
-  function addToCart(name, price) {
-    const existing = cart.find(i => i.name === name);
-    if (existing) { existing.qty++; }
-    else { cart.push({ name, price, qty: 1 }); }
+  function addToCart(btn, name, price) {
+  const existing = cart.find(i => i.name === name);
 
-    btn.classList.add('adding');
-    btn.textContent = '✓ Added';
-    setTimeout(() => {
-      btn.classList.remove('adding');
-      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add`;
-    }, 1500);
+  if (existing) { existing.qty++; }
+  else { cart.push({ name, price, qty: 1 }); }
 
-    updateCartCount();
-    showToast(`${name} added to cart!`);
-  }
+  localStorage.setItem("cart", JSON.stringify(cart));
 
+  // button animation (THIS IS WHAT YOU ASKED ABOUT)
+  btn.classList.add('adding');
+  btn.textContent = '✓ Added';
+
+  setTimeout(() => {
+    btn.classList.remove('adding');
+    btn.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg> Add`;
+  }, 1500);
+
+  updateCartCount();
+  showToast(`${name} added to cart!`);
+}
   function updateCartCount() {
     const total = cart.reduce((s, i) => s + i.qty, 0);
     document.getElementById('cartCount').textContent = total;
