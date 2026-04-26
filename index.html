@@ -1860,7 +1860,7 @@
  function proceedToCheckout() {
   window.location.href = "/checkout.html";
 }
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 function addToCart(name, price) {
   const existing = cart.find(item => item.name === name);
@@ -1872,6 +1872,7 @@ function addToCart(name, price) {
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
+  console.log(cart);
 }
 
   console.log("Cart:", cart);
