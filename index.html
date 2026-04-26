@@ -1154,7 +1154,9 @@
       <span class="cart-total-label">Total</span>
       <span class="cart-total-price" id="cartTotal">$0.00</span>
     </div>
-    <button class="checkout-btn" onclick="showToast('Checkout coming soon!')">Proceed to Checkout →</button>
+    <button class="checkout-btn" onclick="proceedToCheckout()">
+  Proceed to Checkout →
+</button>
   </div>
 </div>
 
@@ -1854,6 +1856,25 @@
 
   // ─── INIT ───
   initReviews();
+  
+ function proceedToCheckout() {
+  window.location.href = "/checkout.html";
+}
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// ADD TO CART
+function addToCart(name, price) {
+  const existing = cart.find(item => item.name === name);
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({ name, price, quantity: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  console.log("Cart:", cart);
+}
 </script>
 </body>
 </html>
