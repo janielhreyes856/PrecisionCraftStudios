@@ -1708,7 +1708,7 @@
     document.getElementById('cartDrawer').classList.remove('open');
   }
 
-  function addToCart(btn, name, price) {
+  function addToCart(name, price) {
     const existing = cart.find(i => i.name === name);
     if (existing) { existing.qty++; }
     else { cart.push({ name, price, qty: 1 }); }
