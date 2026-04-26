@@ -1,4 +1,3 @@
-<script src="checkout.js">
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const summary = document.getElementById("orderSummary");
@@ -51,4 +50,3 @@ function buildPayPalForm(cart) {
 }
 
 renderOrder();
-</script>
