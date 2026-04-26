@@ -4,7 +4,6 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 const summary = document.getElementById("orderSummary");
 const paypalContainer = document.getElementById("paypalFormContainer");
 
-// RENDER ORDER SUMMARY
 function renderOrder() {
   let total = 0;
 
@@ -23,7 +22,6 @@ function renderOrder() {
   buildPayPalForm(cart);
 }
 
-// BUILD PAYPAL FORM
 function buildPayPalForm(cart) {
   let form = `
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
