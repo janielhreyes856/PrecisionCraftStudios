@@ -1862,8 +1862,7 @@
 }
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// ADD TO CART
-function addToCart(name, price) {
+function addToCart(button, name, price) {
   const existing = cart.find(item => item.name === name);
 
   if (existing) {
@@ -1873,6 +1872,7 @@ function addToCart(name, price) {
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
+
   console.log("Cart:", cart);
 }
 </script>
