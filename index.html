@@ -1313,7 +1313,7 @@
 
         <div class="product-footer">
           <div class="product-price">$55.00</div>
-          <button class="add-to-cart" onclick="addToCart(this, 'Signature Painted Cap', 55.00)">
+          <button class="add-to-cart" onclick="addToCart('Signature Painted Cap', 55.00)">
             Add
           </button>
         </div>
@@ -1334,7 +1334,7 @@
 
         <div class="product-footer">
           <div class="product-price">$48.00</div>
-          <button class="add-to-cart" onclick="addToCart(this, 'Custom Bucket Hat', 48.00)">
+          <button class="add-to-cart" onclick="addToCart('Custom Bucket Hat', 48.00)">
             Add
           </button>
         </div>
@@ -1355,7 +1355,7 @@
 
         <div class="product-footer">
           <div class="product-price">$18.00</div>
-          <button class="add-to-cart" onclick="addToCart(this, 'Custom Sticker Pack', 18.00)">
+          <button class="add-to-cart" onclick="addToCart('Custom Sticker Pack', 18.00)">
             Add
           </button>
         </div>
@@ -1376,7 +1376,7 @@
 
         <div class="product-footer">
           <div class="product-price">$8.00</div>
-          <button class="add-to-cart" onclick="addToCart(this, 'Large Logo Sticker', 8.00)">
+          <button class="add-to-cart" onclick="addToCart('Large Logo Sticker', 8.00)">
             Add
           </button>
         </div>
@@ -1397,7 +1397,7 @@
 
         <div class="product-footer">
           <div class="product-price">$18.00</div>
-          <button class="add-to-cart" onclick="addToCart(this, 'Custom Sticker Pack', 18.00)">
+          <button class="add-to-cart" onclick="addToCart('Custom Sticker Pack', 18.00)">
             Add
           </button>
         </div>
@@ -1862,7 +1862,7 @@
 }
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-function addToCart(button, name, price) {
+function addToCart(name, price) {
   const existing = cart.find(item => item.name === name);
 
   if (existing) {
@@ -1872,6 +1872,7 @@ function addToCart(button, name, price) {
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
+}
 
   console.log("Cart:", cart);
 }
