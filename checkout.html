@@ -4,40 +4,152 @@
   <meta charset="UTF-8">
   <title>Checkout</title>
   <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ─── PAGE BASE ─── */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: white;
+    }
+
+    /* ─── TOP NAV (CENTERED BRAND) ─── */
+    .checkout-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px 0;
+      background: rgba(0,0,0,0.7);
+      border-bottom: 1px solid rgba(142, 202, 174, 0.2);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .checkout-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #8ECAAE; /* mint accent */
+      letter-spacing: 1px;
+    }
+
+    .checkout-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #8ECAAE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: black;
+      font-weight: bold;
+    }
+
+    /* ─── CENTER LAYOUT ─── */
+    .checkout-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .checkout-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(142, 202, 174, 0.2);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    /* ─── ITEMS ─── */
+    #checkoutItems {
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .checkout-item {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    #checkoutTotal {
+      color: #8ECAAE;
+      margin-top: 10px;
+    }
+
+    /* ─── INPUTS ─── */
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid rgba(142, 202, 174, 0.3);
+      background: rgba(0,0,0,0.4);
+      color: white;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #8ECAAE;
+      box-shadow: 0 0 8px rgba(142, 202, 174, 0.3);
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin: 20px 0;
+    }
+  </style>
 </head>
 
 <body>
 
-  <section class="checkout-container">
-    <h1>Your Order</h1>
+  <!-- ─── CENTERED NAV ─── -->
+  <div class="checkout-nav">
+    <div class="checkout-brand">
+      <div class="checkout-logo">🐸</div>
+      Coqui Eats
+    </div>
+  </div>
 
-    <!-- 🧾 CART ITEMS -->
-    <div id="checkoutItems"></div>
+  <!-- ─── CHECKOUT SECTION ─── -->
+  <div class="checkout-wrapper">
+    <section class="checkout-container">
 
-    <!-- 💰 TOTAL -->
-    <h3 id="checkoutTotal"></h3>
+      <h1>Your Order</h1>
 
-    <hr>
+      <!-- CART -->
+      <div id="checkoutItems"></div>
+      <h3 id="checkoutTotal"></h3>
 
-    <!-- 👤 CUSTOMER INFO -->
-    <h2>Delivery Information</h2>
+      <hr>
 
-    <input id="name" placeholder="Full Name" />
-    <input id="email" placeholder="Email" />
-    <input id="phone" placeholder="Phone" />
-    <input id="address" placeholder="Delivery Address" />
+      <!-- CUSTOMER INFO -->
+      <h2>Delivery Information</h2>
 
-    <hr>
+      <input id="name" placeholder="Full Name" />
+      <input id="email" placeholder="Email" />
+      <input id="phone" placeholder="Phone" />
+      <input id="address" placeholder="Delivery Address" />
 
-    <!-- 💳 PAYPAL BUTTON -->
-    <div id="paypal-button-container"></div>
+      <hr>
 
-  </section>
+      <!-- PAYPAL -->
+      <div id="paypal-button-container"></div>
 
-  <!-- PayPal SDK (REPLACE CLIENT ID) -->
-  <script src="https://www.paypal.com/sdk/js?client-id=AX_X3bPIYCtDna7I4zfHSLmvFoqKwGje543_awlB5OJa34m_q8vtV0SDTO0WmdXslg2EQwzKmVNTpx5G&currency=USD"></script>
+    </section>
+  </div>
 
-  <!-- Checkout logic -->
+  <!-- PAYPAL -->
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
+
+  <!-- JS -->
   <script src="checkout.js"></script>
 
 </body>
