@@ -11,20 +11,33 @@
   <section class="checkout-container">
     <h1>Your Order</h1>
 
-    <!-- Cart items -->
+    <!-- 🧾 CART ITEMS -->
     <div id="checkoutItems"></div>
 
-    <!-- Total -->
+    <!-- 💰 TOTAL -->
     <h3 id="checkoutTotal"></h3>
 
-    <!-- PayPal button -->
+    <hr>
+
+    <!-- 👤 CUSTOMER INFO -->
+    <h2>Delivery Information</h2>
+
+    <input id="name" placeholder="Full Name" />
+    <input id="email" placeholder="Email" />
+    <input id="phone" placeholder="Phone" />
+    <input id="address" placeholder="Delivery Address" />
+
+    <hr>
+
+    <!-- 💳 PAYPAL BUTTON -->
     <div id="paypal-button-container"></div>
+
   </section>
 
-  <!-- PayPal SDK -->
+  <!-- PayPal SDK (REPLACE CLIENT ID) -->
   <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
 
-  <!-- Your checkout logic -->
+  <!-- Checkout logic -->
   <script src="checkout.js"></script>
 
 </body>
