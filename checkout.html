@@ -11,15 +11,20 @@
   <section class="checkout-container">
     <h1>Your Order</h1>
 
-    <!-- JS will fill this -->
-    <div id="orderSummary"></div>
+    <!-- Cart items -->
+    <div id="checkoutItems"></div>
 
-    <!-- JS will build PayPal button here -->
-    <div id="paypalFormContainer"></div>
+    <!-- Total -->
+    <h3 id="checkoutTotal"></h3>
 
+    <!-- PayPal button -->
+    <div id="paypal-button-container"></div>
   </section>
 
-  <!-- THIS connects your JavaScript -->
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
+
+  <!-- Your checkout logic -->
   <script src="checkout.js"></script>
 
 </body>
