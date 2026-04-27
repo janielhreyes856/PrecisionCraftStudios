@@ -1,156 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Checkout</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout – Precision Craft Studios</title>
 
-  <style>
-    /* ─── PAGE BASE ─── */
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b0b0b;
-      color: white;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    /* ─── TOP NAV (CENTERED BRAND) ─── */
-    .checkout-nav {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 18px 0;
-      background: rgba(0,0,0,0.7);
-      border-bottom: 1px solid rgba(142, 202, 174, 0.2);
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(10px);
-    }
+<!-- PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
 
-    .checkout-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #8ECAAE; /* mint accent */
-      letter-spacing: 1px;
-    }
+<style>
+  :root {
+    --mint: #8ECAAE;
+    --mint-light: #C8E8D9;
+    --mint-pale: #EDF7F2;
+    --mint-deep: #5FAD8A;
+    --white: #FFFFFF;
+    --off-white: #F8FCFA;
+    --black: #111111;
+    --black-soft: #222222;
+    --gray: #888888;
+    --gray-light: #E8E8E8;
+    --font-display: 'Cormorant Garamond', serif;
+    --font-ui: 'Jost', sans-serif;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow: 0 4px 24px rgba(0,0,0,0.07);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
+  }
 
-    .checkout-logo {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: #8ECAAE;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: black;
-      font-weight: bold;
-    }
+  body {
+    margin: 0;
+    font-family: var(--font-ui);
+    background: var(--white);
+    color: var(--black-soft);
+  }
 
-    /* ─── CENTER LAYOUT ─── */
-    .checkout-wrapper {
-      display: flex;
-      justify-content: center;
-      padding: 40px 20px;
-    }
+  /* ─── NAVBAR (MATCH YOUR SITE EXACTLY) ─── */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 72px;
+    background: var(--white);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
 
-    .checkout-container {
-      width: 100%;
-      max-width: 600px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(142, 202, 174, 0.2);
-      border-radius: 16px;
-      padding: 30px;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-    }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
 
-    /* ─── ITEMS ─── */
-    #checkoutItems {
-      margin: 20px 0;
-      text-align: left;
-    }
+  .nav-logo-img {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 
-    .checkout-item {
-      padding: 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
+  .nav-brand {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--black);
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+  }
 
-    #checkoutTotal {
-      color: #8ECAAE;
-      margin-top: 10px;
-    }
+  .nav-brand span {
+    font-size: 0.65rem;
+    font-family: var(--font-ui);
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
 
-    /* ─── INPUTS ─── */
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid rgba(142, 202, 174, 0.3);
-      background: rgba(0,0,0,0.4);
-      color: white;
-    }
+  /* ─── CHECKOUT WRAPPER ─── */
+  .checkout-container {
+    max-width: 750px;
+    margin: 140px auto 80px;
+    padding: 40px;
+    border: 1px solid rgba(142, 202, 174, 0.25);
+    border-radius: 18px;
+    background: var(--off-white);
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
 
-    input:focus {
-      outline: none;
-      border-color: #8ECAAE;
-      box-shadow: 0 0 8px rgba(142, 202, 174, 0.3);
-    }
+  .checkout-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: var(--mint-deep);
+  }
 
-    hr {
-      border: none;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      margin: 20px 0;
-    }
-  </style>
+  #checkoutItems {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  #checkoutItems div {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-light);
+  }
+
+  #checkoutTotal {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: var(--mint-deep);
+  }
+
+  #paypal-button-container {
+    margin-top: 30px;
+  }
+</style>
 </head>
 
 <body>
 
-  <!-- ─── CENTERED NAV ─── -->
-  <div class="checkout-nav">
-    <div class="checkout-brand">
-      <div class="checkout-logo">🐸</div>
-      Coqui Eats
+<!-- ─── NAVBAR (CENTERED BRAND ONLY) ─── -->
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="https://i.imgur.com/v8Omcnw.png" alt="Precision Craft Studios Logo" class="nav-logo-img">
+    <div class="nav-brand">
+      Precision Craft Studios
+      <span>Crafting What Brings Joy</span>
     </div>
-  </div>
+  </a>
+</nav>
 
-  <!-- ─── CHECKOUT SECTION ─── -->
-  <div class="checkout-wrapper">
-    <section class="checkout-container">
+<!-- ─── CHECKOUT CONTENT ─── -->
+<section class="checkout-container">
 
-      <h1>Your Order</h1>
+  <div class="checkout-title">Your Order</div>
 
-      <!-- CART -->
-      <div id="checkoutItems"></div>
-      <h3 id="checkoutTotal"></h3>
+  <!-- CART ITEMS -->
+  <div id="checkoutItems"></div>
 
-      <hr>
-
-      <!-- CUSTOMER INFO -->
-      <h2>Delivery Information</h2>
-
-      <input id="name" placeholder="Full Name" />
-      <input id="email" placeholder="Email" />
-      <input id="phone" placeholder="Phone" />
-      <input id="address" placeholder="Delivery Address" />
-
-      <hr>
-
-      <!-- PAYPAL -->
-      <div id="paypal-button-container"></div>
-
-    </section>
-  </div>
+  <!-- TOTAL -->
+  <h3 id="checkoutTotal"></h3>
 
   <!-- PAYPAL -->
-  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
+  <div id="paypal-button-container"></div>
 
-  <!-- JS -->
-  <script src="checkout.js"></script>
+</section>
+
+<!-- ─── YOUR JS ─── -->
+<script src="checkout.js"></script>
 
 </body>
 </html>
