@@ -1,54 +1,65 @@
 document.addEventListener("DOMContentLoaded", () => {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const summary = document.getElementById("orderSummary");
-  const paypalContainer = document.getElementById("paypalFormContainer");
+  const itemsContainer = document.getElementById("checkoutItems");
+  const totalContainer = document.getElementById("checkoutTotal");
+  const paypalContainer = document.getElementById("paypal-button-container");
 
-  function renderOrder() {
-    let total = 0;
-
-    summary.innerHTML = cart.map(item => {
-      total += item.price * item.quantity;
-
-      return `
-        <div class="checkout-item">
-          ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}
-        </div>
-      `;
-    }).join("");
-
-    summary.innerHTML += `<h3>Total: $${total.toFixed(2)}</h3>`;
-
-    buildPayPalForm();
+  // ─── CALCULATE TOTAL ───
+  function getTotal() {
+    return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   }
 
-  function buildPayPalForm() {
-    let form = `
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-        <input type="hidden" name="cmd" value="_cart">
-        <input type="hidden" name="upload" value="1">
-        <input type="hidden" name="business" value="YOUR_PAYPAL_EMAIL@gmail.com">
-    `;
+  // ─── RENDER CHECKOUT ITEMS ───
+  function renderCheckout() {
+    if (!cart.length) {
+      itemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+      totalContainer.innerText = "Total: $0.00";
+      return;
+    }
 
-    cart.forEach((item, index) => {
-      let i = index + 1;
+    itemsContainer.innerHTML = cart
+      .map(
+        (item) =>
+          `<div class="checkout-item">
+            ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}
+          </div>`
+      )
+      .join("");
 
-      form += `
-        <input type="hidden" name="item_name_${i}" value="${item.name}">
-        <input type="hidden" name="amount_${i}" value="${item.price}">
-        <input type="hidden" name="quantity_${i}" value="${item.quantity}">
-      `;
-    });
-
-    form += `
-        <button type="submit" class="checkout-btn">
-          Pay with PayPal
-        </button>
-      </form>
-    `;
-
-    paypalContainer.innerHTML = form;
+    totalContainer.innerText = "Total: $" + getTotal().toFixed(2);
   }
 
-  renderOrder();
+  // ─── PAYPAL BUTTON ───
+  function loadPayPal() {
+    paypal
+      .Buttons({
+        createOrder: (data, actions) => {
+          return actions.order.create({
+            purchase_units: [
+              {
+                amount: {
+                  value: getTotal().toFixed(2),
+                },
+              },
+            ],
+          });
+        },
+
+        onApprove: (data, actions) => {
+          return actions.order.capture().then((details) => {
+            alert(
+              "Payment successful! " + details.payer.name.given_name
+            );
+
+            localStorage.removeItem("cart");
+            window.location.href = "/success.html";
+          });
+        },
+      })
+      .render("#paypal-button-container");
+  }
+
+  renderCheckout();
+  loadPayPal();
 });
