@@ -1,3 +1,33 @@
-<h1>Thank you for your order 🎉</h1>
-<p>Your payment was successful.</p>
-<a href="/">Return Home</a>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Success</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <section class="success-container">
+    <h1>🎉 Thank You for Your Order!</h1>
+    <p>Your order has been received and is being prepared.</p>
+
+    <div id="orderInfo"></div>
+  </section>
+
+  <script>
+    const order = JSON.parse(localStorage.getItem("lastOrder"));
+
+    document.getElementById("orderInfo").innerHTML = `
+      <h3>Order #${order.orderId}</h3>
+
+      <h4>Customer</h4>
+      <p>${order.customer.name}</p>
+      <p>${order.customer.address}</p>
+
+      <h4>Items</h4>
+      ${order.cart.map(i => `<p>${i.name} x${i.qty}</p>`).join("")}
+    `;
+  </script>
+
+</body>
+</html>
