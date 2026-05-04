@@ -883,7 +883,12 @@
   .reviews-header .section-eyebrow::before { display: none; }
 
   .reviews-carousel-wrap { position: relative; }
-  .reviews-track-container { overflow: hidden; width: 100%;}
+  .reviews-track-container { 
+    overflow: hidden; 
+    width: 100%;
+    display: flex;
+  justify-content: center; /* centers the visible area */
+  }
   .reviews-track {
     display: flex;
     gap: 24px;
@@ -1548,17 +1553,6 @@
     <div class="reviews-track-container">
       <div class="reviews-track" id="reviewsTrack">
 
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <div class="review-text">"Absolutely blew me away. The detail on my custom hat was beyond what I imagined. Will be ordering again for sure."</div>
-          <div class="review-author">
-            <div class="review-avatar">J</div>
-            <div>
-              <div class="review-name">Jordan M.</div>
-              <div class="review-product">Custom Painted Cap</div>
-            </div>
-          </div>
-        </div>
 
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
@@ -1584,17 +1578,7 @@
           </div>
         </div>
 
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <div class="review-text">"Love supporting a small creative brand doing it right. My logo stickers look professional and premium. Huge fan."</div>
-          <div class="review-author">
-            <div class="review-avatar">K</div>
-            <div>
-              <div class="review-name">Kira S.</div>
-              <div class="review-product">Large Logo Sticker</div>
-            </div>
-          </div>
-        </div>
+       
 
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
@@ -1611,12 +1595,7 @@
       </div>
     </div>
 
-    <div class="reviews-controls">
-      <button class="review-arrow" onclick="prevReview()">&lt;</button>
-      <div class="reviews-dots" id="reviewDots"></div>
-      <button class="review-arrow" onclick="nextReview()">&gt;</button>
-    </div>
-  </div>
+    
 </section>
 
 <!-- ─── CONTACT ─── -->
@@ -1640,7 +1619,7 @@
 
     <div class="contact-detail">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-      hello@precisioncraftstudios.com
+      precisioncraftstudios@gmail.com
     </div>
     <div class="contact-detail">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/></svg>
@@ -1731,7 +1710,7 @@
   <div class="footer-bottom">
     <p>© 2025 Precision Craft Studios. All rights reserved.</p>
     <div class="footer-socials">
-      <a href="https://instagram.com" target="_blank" class="footer-social">
+      <a href="https://www.instagram.com/precisioncraftstudios/" target="_blank" class="footer-social">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
       </a>
       <a href="#" class="footer-social">
@@ -1872,93 +1851,109 @@
   }
 
   // ─── REVIEWS CAROUSEL (TRUE INFINITE LOOP FIXED) ───
-  let reviewIdx = 0;
-  let reviews = [];
-  let track = null;
-  let dotsContainer = null;
+ 
+  <script>
+  // ─── REVIEWS CAROUSEL (FINAL STABLE VERSION) ───
+  let index = 1;
+  let track, cards, dots;
   let cardWidth = 0;
 
   function initReviews() {
-    track = document.getElementById('reviewsTrack');
-    dotsContainer = document.getElementById('reviewDots');
+    track = document.getElementById("reviewsTrack");
+    dots = document.getElementById("reviewDots");
 
-    reviews = Array.from(document.querySelectorAll('.review-card'));
+    cards = Array.from(document.querySelectorAll(".review-card"));
+    if (!track || cards.length === 0) return;
 
-    if (!track || !reviews.length) return;
-
-    // clone first + last for smooth loop
-    const firstClone = reviews[0].cloneNode(true);
-    const lastClone = reviews[reviews.length - 1].cloneNode(true);
+    // clones
+    const firstClone = cards[0].cloneNode(true);
+    const lastClone = cards[cards.length - 1].cloneNode(true);
 
     track.appendChild(firstClone);
-    track.insertBefore(lastClone, reviews[0]);
+    track.insertBefore(lastClone, cards[0]);
 
-    updateCardWidth();
+    updateWidth();
     createDots();
-    goToReview(0, false);
+
+    // start on real first card
+    track.style.transform = `translateX(-${index * cardWidth}px)`;
   }
 
-  function updateCardWidth() {
-    const card = document.querySelector('.review-card');
-    if (!card) return;
-    cardWidth = card.offsetWidth;
+  function updateWidth() {
+    const card = document.querySelector(".review-card");
+
+    // adjust if you change spacing
+    const gap = 24;
+    cardWidth = card.getBoundingClientRect().width + gap;
   }
 
   function createDots() {
-    if (!dotsContainer) return;
+    if (!dots) return;
 
-    dotsContainer.innerHTML = "";
+    dots.innerHTML = "";
 
-    reviews.forEach((_, i) => {
-      const dot = document.createElement('div');
-      dot.className = 'review-dot' + (i === 0 ? ' active' : '');
-      dot.onclick = () => goToReview(i);
-      dotsContainer.appendChild(dot);
+    cards.forEach((_, i) => {
+      const dot = document.createElement("div");
+      dot.className = "review-dot" + (i === 0 ? " active" : "");
+      dot.onclick = () => goTo(i + 1);
+      dots.appendChild(dot);
     });
   }
 
-  function goToReview(idx, animate = true) {
-    if (!track || !reviews.length) return;
+  function goTo(i) {
+    index = i;
 
-    const total = reviews.length;
+    track.style.transition = "transform 0.5s ease";
+    track.style.transform = `translateX(-${index * cardWidth}px)`;
 
-    reviewIdx = (idx + total) % total;
-
-    track.style.transition = animate ? "transform 0.5s ease" : "none";
-
-    track.style.transform = `translateX(-${(reviewIdx + 1) * cardWidth}px)`;
-
-    document.querySelectorAll('.review-dot').forEach((d, i) =>
-      d.classList.toggle('active', i === reviewIdx)
-    );
+    track.addEventListener("transitionend", handleLoop);
+    updateDots();
   }
 
   function nextReview() {
-    reviewIdx++;
-    goToReview(reviewIdx);
-
-    if (reviewIdx >= reviews.length) {
-      setTimeout(() => {
-        track.style.transition = "none";
-        reviewIdx = 0;
-        goToReview(reviewIdx, false);
-      }, 500);
-    }
+    goTo(index + 1);
   }
 
   function prevReview() {
-    reviewIdx--;
-    goToReview(reviewIdx);
-
-    if (reviewIdx < 0) {
-      setTimeout(() => {
-        track.style.transition = "none";
-        reviewIdx = reviews.length - 1;
-        goToReview(reviewIdx, false);
-      }, 500);
-    }
+    goTo(index - 1);
   }
 
+  function handleLoop() {
+    track.removeEventListener("transitionend", handleLoop);
+
+    const total = cards.length;
+
+    if (index === 0) {
+      track.style.transition = "none";
+      index = total;
+      track.style.transform = `translateX(-${index * cardWidth}px)`;
+    }
+
+    if (index === total + 1) {
+      track.style.transition = "none";
+      index = 1;
+      track.style.transform = `translateX(-${index * cardWidth}px)`;
+    }
+
+    updateDots();
+  }
+
+  function updateDots() {
+    const allDots = document.querySelectorAll(".review-dot");
+    let real = index - 1;
+
+    if (real < 0) real = allDots.length - 1;
+    if (real >= allDots.length) real = 0;
+
+    allDots.forEach((d, i) => d.classList.toggle("active", i === real));
+  }
+
+  window.addEventListener("load", initReviews);
+</script>
+  
+  
+  
+  
   // ─── CONTACT FORM ───
   function submitForm() {
     const success = document.getElementById('formSuccess');
